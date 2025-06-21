@@ -1,0 +1,27 @@
+name: CI for Develop Branch
+
+on:
+  pull_request:
+    branches: [develop]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install linters
+        run: |
+          npm init -y
+          npm install htmlhint stylelint stylelint-config-standard --save-dev
+
+      - name: Lint HTML
+        run: npx htmlhint "src/**/*.html" --config .htmlhintrc.json
+
+      - name: Lint CSS
+        run: npx stylelint "styles/**/*.css"
